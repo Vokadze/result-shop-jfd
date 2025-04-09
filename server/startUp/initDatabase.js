@@ -3,9 +3,11 @@
 
 const Category = require("../models/Category")
 const Product = require("../models/Product")
+const Basket = require("../models/Basket")
 
 const categoryMock = require("../mock/categories.json")
 const productsMock = require("../mock/products.json")
+const basketsMock = require("../mock/baskets.json")
 
 module.exports = async ()=> {
     const categories = await Category.find()
@@ -15,6 +17,10 @@ module.exports = async ()=> {
     const products = await Product.find()
         if (products.length !== productsMock.length) {
             await createInitialEntity(Product, productsMock)
+        }
+    const baskets = await Product.find()
+        if (baskets.length !== basketsMock.length) {
+            await createInitialEntity(Basket, basketsMock)
         }
 }
 
