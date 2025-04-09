@@ -3,32 +3,49 @@ import PropTypes from "prop-types";
 import { AiOutlineClose } from "react-icons/ai";
 import BasketCartListCounter from "../../../ui/basketPageUi/basketCartListCounter";
 
-const BasketCartList = ({ product, productsItems, handleDelete }) => {
+const BasketCartList = ({
+    product,
+    productsItems,
+    prodId,
+    handleDelete,
+    handleIncrement,
+    handleDecrement
+}) => {
+    console.log(product);
+    console.log(productsItems);
+    console.log(prodId);
+
+    // const [counter, setCounter] = useState(0);
+
     const [countProduct, setCountProduct] = useState();
 
     useEffect(() => {
         setCountProduct();
     }, [countProduct]);
 
-    const handleIncrement = () => {
-        if (product.countPay >= 1) {
-            const newLocalPay = productsItems.filter(
-                (product) => product.count === product.count--
-            );
-            localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-        }
-        setCountProduct(product.countPay++);
-    };
+    // const handleIncrement = () => {
+    //     console.log("handleIncrement", product);
+    //     setCounter((prevState) => prevState + 1);
+    //     // if (product.countPay >= 1) {
+    //     //     const newLocalPay = productsItems.filter(
+    //     //         (product) => product.count === product.count--
+    //     //     );
+    //     //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
+    //     // }
+    //     // setCountProduct(product.countPay++);
+    // };
 
-    const handleDecrement = () => {
-        if (product.countPay <= 1) {
-            const newLocalPay = productsItems.filter(
-                (product) => product.count === product.count++
-            );
-            localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-        }
-        setCountProduct(product.countPay--);
-    };
+    // const handleDecrement = () => {
+    //     console.log("handleDecrement", product);
+    //     setCounter((prevState) => prevState - 1);
+    //     // if (product.countPay <= 1) {
+    //     //     const newLocalPay = productsItems.filter(
+    //     //         (product) => product.count === product.count++
+    //     //     );
+    //     //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
+    //     // }
+    //     // setCountProduct(product.countPay--);
+    // };
 
     return (
         <>
@@ -55,6 +72,8 @@ const BasketCartList = ({ product, productsItems, handleDelete }) => {
                                 <h6>Количество:</h6>
                                 <div className="card-counter-product">
                                     <BasketCartListCounter
+                                        // counter={counter}
+                                        prodId={prodId}
                                         handleDecrement={handleDecrement}
                                         handleIncrement={handleIncrement}
                                         product={product}
@@ -90,7 +109,10 @@ const BasketCartList = ({ product, productsItems, handleDelete }) => {
 BasketCartList.propTypes = {
     product: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     productsItems: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    handleDelete: PropTypes.func
+    prodId: PropTypes.string,
+    handleDelete: PropTypes.func,
+    handleIncrement: PropTypes.func,
+    handleDecrement: PropTypes.func
 };
 
 export default BasketCartList;

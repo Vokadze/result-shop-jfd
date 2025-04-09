@@ -1,72 +1,72 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 import BasketShopList from "../basketShopList/basketShopList";
-import { useSelector } from "react-redux";
-import { getProductById } from "../../../../store/products";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getProductById
+} from "../../../../store/products";
 import history from "../../../../utils/history";
+import { createBasket, getBasketUpdateContent } from "../../../../store/baskets";
+import basketService from "../../../../service/basket.service";
 
 const BasketShopPage = ({ prodId }) => {
-    const [productsItems, setProductItems] = useState([]);
+    const dispatch = useDispatch();
 
     const product = useSelector(getProductById(prodId));
 
     const onAddProduct = (product) => {
-        const exist = productsItems.find((p) => p._id === product._id);
-        if (exist) {
-            const newCartProducts = productsItems.map((p) =>
-                p._id === product._id
-                    ? {
-                          ...exist,
-                          count: exist.count - 1
-                      }
-                    : p
-            );
-            setProductItems(newCartProducts);
-            localStorage.setItem(
-                "productsItems",
-                JSON.stringify(newCartProducts)
-            );
+        console.log(product);
+
+        if (!prodId) {
+            console.log(prodId);
+            dispatch(getBasketUpdateContent(product));
         } else {
-            const newCartProducts = [
-                ...productsItems,
-                {
-                    ...product,
-                    qty: 1,
-                    countPay: 1
-                }
-            ];
-            setProductItems(newCartProducts);
-            localStorage.setItem(
-                "productsItems",
-                JSON.stringify(newCartProducts)
-            );
+            console.log(product);
+            basketService.fetchAll(prodId);
+            basketService.create(prodId, product);
+            dispatch(createBasket(product));
         }
+        // const exist = productsItems.find((p) => p._id === product._id);
+        // if (exist) {
+        //     const newCartProducts = productsItems.map((p) =>
+        //         p._id === product._id
+        //             ? {
+        //                   ...exist,
+        //                   count: exist.count - 1
+        //               }
+        //             : p
+        //     );
+        //     setProductItems(newCartProducts);
+        //     localStorage.setItem(
+        //         "productsItems",
+        //         JSON.stringify(newCartProducts)
+        //     );
+        // } else {
+        //     const newCartProducts = [
+        //         ...productsItems,
+        //         {
+        //             ...product,
+        //             qty: 1,
+        //             countPay: 1
+        //         }
+        //     ];
+        //     setProductItems(newCartProducts);
+        //     localStorage.setItem(
+        //         "productsItems",
+        //         JSON.stringify(newCartProducts)
+        //     );
+        // }
         history.push(`/basket`);
     };
 
-    const onRemoveProduct = (product) => {
-        const exist = productsItems.find((p) => p._id === product._id);
-        if (exist.qty === 1) {
-            const newCartProducts = productsItems.filter(
-                (p) => p._id !== product._id
-            );
-            setProductItems(newCartProducts);
-        } else {
-            const newCartProducts = productsItems.map((p) =>
-                p._id === product._id ? { ...exist, count: exist.count + 1 } : p
-            );
-            setProductItems(newCartProducts);
-        }
-    };
-
-    useEffect(() => {
-        setProductItems(
-            localStorage.getItem("productsItems")
-                ? JSON.parse(localStorage.getItem("productsItems"))
-                : []
-        );
-    }, []);
+    // useEffect(() => {
+    //     // setProductItems(
+    //         localStorage.getItem("productsItems")
+    //             ? JSON.parse(localStorage.getItem("productsItems"))
+    //             : []
+    //     // );
+    // }, []);
 
     if (product) {
         return (
@@ -81,9 +81,7 @@ const BasketShopPage = ({ prodId }) => {
 
                 <BasketShopList
                     product={product}
-                    item={productsItems.find((p) => p._id === product._id)}
                     onAddProduct={onAddProduct}
-                    onRemoveProduct={onRemoveProduct}
                 />
             </div>
         );

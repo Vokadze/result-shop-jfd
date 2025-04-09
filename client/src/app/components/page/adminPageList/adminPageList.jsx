@@ -66,15 +66,15 @@ const AdminPageList = () => {
             <div className="container admin-page-table-all">
                 <div className="admin-page-form">
                     {categories && !categoriesLoading && (
-                            <div className="container card">
-                                <div className="card-body">
-                                    <h6 className="card-title">
-                                        Блок для добавления или редактирования
-                                        товара
-                                    </h6>
-                                    <AdminProduct products={products} />
-                                </div>
+                        <div className="container card">
+                            <div className="card-body">
+                                <h6 className="card-title">
+                                    Блок для добавления или редактирования
+                                    товара
+                                </h6>
+                                <AdminProduct products={products} />
                             </div>
+                        </div>
                     )}
                     <div className="container admin-page-table">
                         <div className="p-0 m-0">
