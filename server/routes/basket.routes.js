@@ -27,7 +27,7 @@ router
               });
         }
     })
-    .patch(async (req, res) => {
+    router.patch("/:basket", async (req, res) => {
         try {
             if (req.body) {
                 const newBasketUptate = await Basket.findByIdAndUpdate(req.body._id, req.body, {new: true})
