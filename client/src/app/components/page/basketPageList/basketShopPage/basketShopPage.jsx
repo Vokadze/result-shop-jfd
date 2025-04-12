@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 
 import BasketShopList from "../basketShopList/basketShopList";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    getProductById
-} from "../../../../store/products";
+import { getProductById } from "../../../../store/products";
 import history from "../../../../utils/history";
-import { createBasket, getBasketUpdateContent } from "../../../../store/baskets";
+import {
+    createBasket,
+    getBasketUpdateContent
+} from "../../../../store/baskets";
 import basketService from "../../../../service/basket.service";
 
 const BasketShopPage = ({ prodId }) => {
@@ -79,10 +80,7 @@ const BasketShopPage = ({ prodId }) => {
                     style={{ background: "#dee2e6" }}
                 />
 
-                <BasketShopList
-                    product={product}
-                    onAddProduct={onAddProduct}
-                />
+                <BasketShopList product={product} onAddProduct={onAddProduct} />
             </div>
         );
     } else {

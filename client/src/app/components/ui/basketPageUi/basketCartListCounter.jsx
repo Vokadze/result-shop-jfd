@@ -1,24 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { FaPlus } from "react-icons/fa6";
 import { HiMinus } from "react-icons/hi";
-import { useSelector } from "react-redux";
-import { selectCount } from "../../../store/counterSlice";
+import { useDispatch } from "react-redux";
+import basketService from "../../../service/basket.service";
+import {
+    getCountDec,
+    getCountInc,
+    // getUpdateCount,
+    loadBasketsList
+} from "../../../store/baskets";
 
-function initialCount() {
-    const count = useSelector(selectCount);
-    return count;
-}
+// function initialCount() {
+//     const count = useSelector(selectCount);
+//     return count;
+// }
+
+// function initialCount() {
+//     const count = useSelector(selectCount);
+//     return count;
+// };
 
 const BasketCartListCounter = ({ product, prodId }) => {
     console.log(product);
     console.log(prodId);
 
-    const [counter, setCounter] = useState(initialCount());
+    const [counter, setCounter] = useState(0);
 
-    const handleIncrement = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(loadBasketsList(counter));
+    }, [counter]);
+
+    const formatCount = () => {
+        return counter !== 0 ? counter : product.countPay;
+    };
+
+    const handleIncrement = async () => {
         console.log("handleIncrement", product);
+        // if (prodId) {
+        // console.log(prodId);
+        await basketService.updateCount(product);
+        // dispatch(getUpdateCount(prodId, product));
+        dispatch(getCountInc({ counter, ...product }));
+        await basketService.incCount(prodId, counter, product);
         setCounter((prevState) => prevState + 1);
+        // }
+
         // if (product.countPay >= 1) {
         //     const newLocalPay = productsItems.filter(
         //         (product) => product.count === product.count--
@@ -28,15 +57,26 @@ const BasketCartListCounter = ({ product, prodId }) => {
         // setCountProduct(product.countPay++);
     };
 
-    const handleDecrement = () => {
+    const handleDecrement = async () => {
         console.log("handleDecrement", product);
-        setCounter((prevState) => prevState - 1);
-        // if (product.countPay <= 1) {
-        //     const newLocalPay = productsItems.filter(
-        //         (product) => product.count === product.count++
-        //     );
-        //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-        // }
+        if (counter < 0) {
+            const counter = 0;
+            await basketService.updateCount(product);
+            dispatch(getCountDec(prodId, counter));
+            await basketService.decCount(prodId, counter, product);
+            setCounter((prevState) => prevState - 1);
+        } else if (counter > 0) {
+            await basketService.updateCount(product);
+            dispatch(getCountDec(prodId, counter));
+            await basketService.decCount(prodId, counter, product);
+            setCounter((prevState) => prevState - 1);
+            // }
+            // if (product.countPay <= 1) {
+            //     const newLocalPay = productsItems.filter(
+            //         (product) => product.count === product.count++
+            //     );
+            //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
+        }
         // setCountProduct(product.countPay--);
     };
 
@@ -51,8 +91,8 @@ const BasketCartListCounter = ({ product, prodId }) => {
                     }}
                 />
             </div>
-            {/* <span className="badge bg-primary mx-2">{product.countPay}</span> */}
-            <span className="badge bg-primary mx-2">{counter}</span>
+            <span className="badge bg-primary mx-2">{formatCount()}</span>
+            {/* <span className="badge bg-primary mx-2">{counter}</span> */}
             <div onClick={handleIncrement} role="button">
                 <FaPlus
                     size={20}

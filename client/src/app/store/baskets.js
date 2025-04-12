@@ -7,7 +7,8 @@ const basketsSlice = createSlice({
     initialState: {
         entities: null,
         isLoading: true,
-        error: null
+        error: null,
+        value: 0
         // lastFetch: null
     },
     reducers: {
@@ -38,6 +39,24 @@ const basketsSlice = createSlice({
             state.entities = state.entities.filter(
                 (p) => p._id !== action.payload
             );
+        },
+        increment: (state) => {
+            state.entities.value += 1;
+            // state.entities.push(action.payload._id);
+            // state.value = payload.type.countPay;
+        },
+        decrement: (state) => {
+            state.entities.value -= 1;
+        },
+        // countRequestFiled: (state, action) => {
+        //     state.entities.error = action.payload._id;
+        //     state.entities.isLoading = false;
+        // },
+        countUpdateSuccessed: (state, action) => {
+            state.entities.value = action.payload;
+            // state.entities[
+            //     state.entities.findIndex((p) => p._id === action.payload._id)
+            // ] = action.payload;
         }
     }
 });
@@ -49,13 +68,22 @@ const {
     basketsRequestFiled,
     basketsUpdateSuccessed,
     basketsCreated,
-    removeBaskets
+    removeBaskets,
+    increment,
+    decrement,
+    // countRequestFiled,
+    countUpdateSuccessed
 } = actions;
 
 const basketUpdateRequested = createAction("baskets/basketUpdateRequested");
 const basketUpdateFailed = createAction("baskets/basketUpdateFailed");
 const addNewBasketRequested = createAction("baskets/addNewBasketRequested");
+const countIncUpdateRequested = createAction("baskets/countIncUpdateRequested");
+const countDecUpdateRequested = createAction("baskets/countDecUpdateRequested");
+const countUpdateRequested = createAction("baskets/countUpdateRequested");
 const removeBasketRequested = createAction("baskets/removeBasketRequested");
+
+// export const selectCount = (state) => state.baskets.value;
 
 export const loadBasketsList = () => async (dispatch) => {
     // const { lastFetch } = getState().products;
@@ -110,6 +138,60 @@ export const createBasket =
             }
         } catch (error) {
             dispatch(basketUpdateFailed(error.message));
+        }
+    };
+
+export const getCountInc =
+    ({ _id, counter, ...data }) =>
+    async (dispatch, state) => {
+        console.log("getCountInc _id", _id);
+        console.log("getCountInc counter", counter);
+        console.log("getCountInc data", data);
+        dispatch(countIncUpdateRequested());
+        try {
+            // if (state.counter.value) {
+            // console.log(state.counter.value);
+            const { content } = await basketService.incCount(
+                _id,
+                state.value,
+                counter,
+                data
+            );
+            console.log(content);
+            dispatch(increment(content));
+            // }
+        } catch (error) {
+            // dispatch(basketsRequestFiled(error.message));
+            console.log(error.message);
+        }
+    };
+
+export const getCountDec = ({ _id, counter }) => async (dispatch) => {
+    // console.log("getCountDec _id", _id);
+    // console.log("getCountDec counter", counter);
+    // console.log("getCountDec data", data);
+    dispatch(countDecUpdateRequested());
+    try {
+        const { content } = await basketService.decCount(_id, counter);
+        console.log(content);
+        dispatch(decrement(content));
+    } catch (error) {
+        dispatch(basketsRequestFiled(error.message));
+        // console.log(error.message);
+    }
+};
+
+export const getUpdateCount =
+    ({ _id, ...data }) =>
+    async (dispatch) => {
+        console.log({ _id });
+        console.log({ data });
+        dispatch(countUpdateRequested());
+        try {
+            const { content } = await basketService.updateCount(_id, data);
+            dispatch(countUpdateSuccessed(content));
+        } catch (error) {
+            dispatch(basketsRequestFiled(error.message));
         }
     };
 

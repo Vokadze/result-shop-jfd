@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { AiOutlineClose } from "react-icons/ai";
 import BasketCartListCounter from "../../../ui/basketPageUi/basketCartListCounter";
+// import basketService from "../../../../service/basket.service";
 
 const BasketCartList = ({
     product,
@@ -18,6 +19,9 @@ const BasketCartList = ({
     // const [counter, setCounter] = useState(0);
 
     const [countProduct, setCountProduct] = useState();
+
+    // const products = basketService.fetchAll(prodId);
+    // console.log(products);
 
     useEffect(() => {
         setCountProduct();
@@ -72,6 +76,7 @@ const BasketCartList = ({
                                 <h6>Количество:</h6>
                                 <div className="card-counter-product">
                                     <BasketCartListCounter
+                                        counter={product.countPay}
                                         // counter={counter}
                                         prodId={prodId}
                                         handleDecrement={handleDecrement}

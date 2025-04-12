@@ -32,6 +32,37 @@ const basketService = {
         console.log(data);
         return data;
     },
+    incCount: async (_id, counter, payload) => {
+        const { data } = await httpService.patch(basketEndpoint + _id, {
+            _id,
+            // ...payload,
+            countPay: counter + 1
+        });
+        console.log(data);
+        return data;
+    },
+
+    decCount: async (_id, counter, payload) => {
+        const { data } = await httpService.patch(basketEndpoint + _id, {
+            // ...payload,
+            _id,
+            countPay: counter - 1
+        });
+        return data;
+    },
+
+    // getCount: async () => {
+    //     const { data } = await httpService.patch(basketEndpoint);
+    //     return data;
+    // },
+
+    updateCount: async (payload) => {
+        const { data } = await httpService.patch(
+            basketEndpoint + payload._id,
+            payload
+        );
+        return data;
+    },
 
     delete: async (id) => {
         const { data } = await httpService.delete(basketEndpoint + id);
