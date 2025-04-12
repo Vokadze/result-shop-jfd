@@ -39,12 +39,13 @@ const BasketCartListCounter = ({ product, prodId }) => {
 
     const handleIncrement = async () => {
         console.log("handleIncrement", product);
+        const { count } = product;
         // if (prodId) {
         // console.log(prodId);
         await basketService.updateCount(product);
         // dispatch(getUpdateCount(prodId, product));
-        dispatch(getCountInc({ counter, ...product }));
-        await basketService.incCount(prodId, counter, product);
+        dispatch(getCountInc({ counter, count, ...product }));
+        await basketService.incCount(prodId, counter, count, product);
         setCounter((prevState) => prevState + 1);
         // }
 
@@ -59,16 +60,17 @@ const BasketCartListCounter = ({ product, prodId }) => {
 
     const handleDecrement = async () => {
         console.log("handleDecrement", product);
+        const { count } = product;
         if (counter < 0) {
             const counter = 0;
             await basketService.updateCount(product);
-            dispatch(getCountDec(prodId, counter));
-            await basketService.decCount(prodId, counter, product);
+            dispatch(getCountDec(prodId, counter, count));
+            await basketService.decCount(prodId, counter, count, product);
             setCounter((prevState) => prevState - 1);
         } else if (counter > 0) {
             await basketService.updateCount(product);
-            dispatch(getCountDec(prodId, counter));
-            await basketService.decCount(prodId, counter, product);
+            dispatch(getCountDec(prodId, counter, count));
+            await basketService.decCount(prodId, counter, count, product);
             setCounter((prevState) => prevState - 1);
             // }
             // if (product.countPay <= 1) {

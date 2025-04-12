@@ -32,20 +32,22 @@ const basketService = {
         console.log(data);
         return data;
     },
-    incCount: async (_id, counter, payload) => {
+    incCount: async (_id, counter, count, payload) => {
         const { data } = await httpService.patch(basketEndpoint + _id, {
             _id,
             // ...payload,
+            count: count - (counter + 1 - counter),
             countPay: counter + 1
         });
         console.log(data);
         return data;
     },
 
-    decCount: async (_id, counter, payload) => {
+    decCount: async (_id, counter, count, payload) => {
         const { data } = await httpService.patch(basketEndpoint + _id, {
             // ...payload,
             _id,
+            count: count + (counter + 1 - counter),
             countPay: counter - 1
         });
         return data;

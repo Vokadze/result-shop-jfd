@@ -142,15 +142,17 @@ export const createBasket =
     };
 
 export const getCountInc =
-    ({ _id, counter, ...data }) =>
+    ({ _id, counter, count, ...data }) =>
     async (dispatch, state) => {
         console.log("getCountInc _id", _id);
         console.log("getCountInc counter", counter);
+        console.log("getCountInc count", count);
         console.log("getCountInc data", data);
         dispatch(countIncUpdateRequested());
         try {
             // if (state.counter.value) {
             // console.log(state.counter.value);
+            if (count === null) {
             const { content } = await basketService.incCount(
                 _id,
                 state.value,
@@ -159,6 +161,7 @@ export const getCountInc =
             );
             console.log(content);
             dispatch(increment(content));
+        }
             // }
         } catch (error) {
             // dispatch(basketsRequestFiled(error.message));
@@ -166,15 +169,17 @@ export const getCountInc =
         }
     };
 
-export const getCountDec = ({ _id, counter }) => async (dispatch) => {
+export const getCountDec = ({ _id, counter, count }) => async (dispatch) => {
     // console.log("getCountDec _id", _id);
     // console.log("getCountDec counter", counter);
     // console.log("getCountDec data", data);
     dispatch(countDecUpdateRequested());
     try {
-        const { content } = await basketService.decCount(_id, counter);
+        if (count == null) {
+        const { content } = await basketService.decCount(_id, counter, count);
         console.log(content);
         dispatch(decrement(content));
+    }
     } catch (error) {
         dispatch(basketsRequestFiled(error.message));
         // console.log(error.message);
