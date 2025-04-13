@@ -36,8 +36,8 @@ const BasketForm = () => {
             <div className="d-flex justify-content-center">
                 <div className="d-flex flex-column w-100">
                     <h1>Корзина</h1>
-                    <div className="d-flex flex-row">
-                        <div className="row cols-row-1 cols-row-md-3 g-0">
+                    <div>
+                        <div className="d-flex flex-row">
                             <div className="col">
                                 {productsItem.map((product) => (
                                     <BasketCartList
@@ -50,12 +50,14 @@ const BasketForm = () => {
                                     />
                                 ))}
                             </div>
+                            <div>
+                                <BasketOrder
+                                    itemPrice={itemPrice}
+                                    productsItem={productsItem}
+                                    handleClick={handleClick}
+                                />
+                            </div>
                         </div>
-                        <BasketOrder
-                            itemPrice={itemPrice}
-                            productsItem={productsItem}
-                            handleClick={handleClick}
-                        />
                     </div>
                 </div>
             </div>
