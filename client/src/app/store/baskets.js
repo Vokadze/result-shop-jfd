@@ -1,6 +1,5 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import basketService from "../service/basket.service";
-// import isOutdated from "../utils/isOutdated";
 
 const basketsSlice = createSlice({
     name: "baskets",
@@ -9,7 +8,6 @@ const basketsSlice = createSlice({
         isLoading: true,
         error: null,
         value: 0
-        // lastFetch: null
     },
     reducers: {
         basketsRequested: (state) => {
@@ -17,7 +15,6 @@ const basketsSlice = createSlice({
         },
         basketsReceved: (state, action) => {
             state.entities = action.payload;
-            // state.lastFetch = Date.now();
             state.isLoading = false;
         },
         basketsRequestFiled: (state, action) => {
@@ -42,8 +39,6 @@ const basketsSlice = createSlice({
         },
         increment: (state) => {
             state.entities.value += 1;
-            // state.entities.push(action.payload._id);
-            // state.value = payload.type.countPay;
         },
         decrement: (state) => {
             state.entities.value -= 1;
@@ -54,9 +49,6 @@ const basketsSlice = createSlice({
         // },
         countUpdateSuccessed: (state, action) => {
             state.entities.value = action.payload;
-            // state.entities[
-            //     state.entities.findIndex((p) => p._id === action.payload._id)
-            // ] = action.payload;
         }
     }
 });
@@ -71,7 +63,6 @@ const {
     removeBaskets,
     increment,
     decrement,
-    // countRequestFiled,
     countUpdateSuccessed
 } = actions;
 
@@ -83,20 +74,14 @@ const countDecUpdateRequested = createAction("baskets/countDecUpdateRequested");
 const countUpdateRequested = createAction("baskets/countUpdateRequested");
 const removeBasketRequested = createAction("baskets/removeBasketRequested");
 
-// export const selectCount = (state) => state.baskets.value;
-
 export const loadBasketsList = () => async (dispatch) => {
-    // const { lastFetch } = getState().products;
-    // if (isOutdated(lastFetch)) {
     dispatch(basketsRequested());
     try {
         const { content } = await basketService.fetchAll();
-        console.log(content);
         dispatch(basketsReceved(content));
     } catch (error) {
         dispatch(basketsRequestFiled(error.message));
     }
-    // }
 };
 
 export const getBasketById = (prodId) => (state) => {
@@ -133,7 +118,6 @@ export const createBasket =
         try {
             if (!_id) {
                 const { content } = await basketService.create(_id, data);
-                console.log(content);
                 dispatch(basketsCreated(content));
             }
         } catch (error) {
@@ -144,14 +128,8 @@ export const createBasket =
 export const getCountInc =
     ({ _id, counter, count, ...data }) =>
     async (dispatch) => {
-        console.log("getCountInc _id", _id);
-        console.log("getCountInc counter", counter);
-        console.log("getCountInc count", count);
-        console.log("getCountInc data", data);
         dispatch(countIncUpdateRequested());
         try {
-            // if (state.counter.value) {
-            // console.log(state.counter.value);
             if (count === null) {
                 const { content } = await basketService.incCount(
                     _id,
@@ -159,31 +137,26 @@ export const getCountInc =
                     counter,
                     data
                 );
-                console.log(content);
                 dispatch(increment(content));
             }
             // }
         } catch (error) {
-            // dispatch(basketsRequestFiled(error.message));
-            console.log(error.message);
+            dispatch(basketsRequestFiled(error.message));
+            // console.log(error.message);
         }
     };
 
 export const getCountDec =
     ({ _id, counter, count }) =>
     async (dispatch) => {
-        // console.log("getCountDec _id", _id);
-        // console.log("getCountDec counter", counter);
-        // console.log("getCountDec data", data);
         dispatch(countDecUpdateRequested());
         try {
-            if (count == null) {
+            if (count === null) {
                 const { content } = await basketService.decCount(
                     _id,
                     counter,
                     count
                 );
-                console.log(content);
                 dispatch(decrement(content));
             }
         } catch (error) {

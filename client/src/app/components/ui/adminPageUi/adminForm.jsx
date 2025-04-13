@@ -9,7 +9,6 @@ import { getUserId } from "../../../service/localStorage.service";
 
 const AdminForm = ({ data, onSubmit, categoriesList }) => {
     const { form, handleChange, handleSubmit } = useForm(data, onSubmit);
-
     const userId = useSelector(getUserId);
 
     if (userId) {

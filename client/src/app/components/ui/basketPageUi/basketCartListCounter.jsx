@@ -7,24 +7,10 @@ import basketService from "../../../service/basket.service";
 import {
     getCountDec,
     getCountInc,
-    // getUpdateCount,
     loadBasketsList
 } from "../../../store/baskets";
 
-// function initialCount() {
-//     const count = useSelector(selectCount);
-//     return count;
-// }
-
-// function initialCount() {
-//     const count = useSelector(selectCount);
-//     return count;
-// };
-
 const BasketCartListCounter = ({ product, prodId }) => {
-    console.log(product);
-    console.log(prodId);
-
     const [counter, setCounter] = useState(0);
 
     const dispatch = useDispatch();
@@ -38,28 +24,14 @@ const BasketCartListCounter = ({ product, prodId }) => {
     };
 
     const handleIncrement = async () => {
-        console.log("handleIncrement", product);
         const { count } = product;
-        // if (prodId) {
-        // console.log(prodId);
         await basketService.updateCount(product);
-        // dispatch(getUpdateCount(prodId, product));
         dispatch(getCountInc({ counter, count, ...product }));
         await basketService.incCount(prodId, counter, count, product);
         setCounter((prevState) => prevState + 1);
-        // }
-
-        // if (product.countPay >= 1) {
-        //     const newLocalPay = productsItems.filter(
-        //         (product) => product.count === product.count--
-        //     );
-        //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-        // }
-        // setCountProduct(product.countPay++);
     };
 
     const handleDecrement = async () => {
-        console.log("handleDecrement", product);
         const { count } = product;
         if (counter < 0) {
             const counter = 0;
@@ -72,14 +44,7 @@ const BasketCartListCounter = ({ product, prodId }) => {
             dispatch(getCountDec(prodId, counter, count));
             await basketService.decCount(prodId, counter, count, product);
             setCounter((prevState) => prevState - 1);
-            // }
-            // if (product.countPay <= 1) {
-            //     const newLocalPay = productsItems.filter(
-            //         (product) => product.count === product.count++
-            //     );
-            //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
         }
-        // setCountProduct(product.countPay--);
     };
 
     return (
@@ -94,7 +59,6 @@ const BasketCartListCounter = ({ product, prodId }) => {
                 />
             </div>
             <span className="badge bg-primary mx-2">{formatCount()}</span>
-            {/* <span className="badge bg-primary mx-2">{counter}</span> */}
             <div onClick={handleIncrement} role="button">
                 <FaPlus
                     size={20}
@@ -110,10 +74,7 @@ const BasketCartListCounter = ({ product, prodId }) => {
 
 BasketCartListCounter.propTypes = {
     product: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    prodId: PropTypes.string,
-    // handleIncrement: PropTypes.func,
-    // handleDecrement: PropTypes.func,
-    counter: PropTypes.number
+    prodId: PropTypes.string
 };
 
 export default BasketCartListCounter;

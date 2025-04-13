@@ -1,56 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { AiOutlineClose } from "react-icons/ai";
 import BasketCartListCounter from "../../../ui/basketPageUi/basketCartListCounter";
-// import basketService from "../../../../service/basket.service";
 
 const BasketCartList = ({
     product,
-    productsItems,
     prodId,
     handleDelete,
     handleIncrement,
     handleDecrement
 }) => {
-    console.log(product);
-    console.log(productsItems);
-    console.log(prodId);
-
-    // const [counter, setCounter] = useState(0);
-
-    const [countProduct, setCountProduct] = useState();
-
-    // const products = basketService.fetchAll(prodId);
-    // console.log(products);
-
-    useEffect(() => {
-        setCountProduct();
-    }, [countProduct]);
-
-    // const handleIncrement = () => {
-    //     console.log("handleIncrement", product);
-    //     setCounter((prevState) => prevState + 1);
-    //     // if (product.countPay >= 1) {
-    //     //     const newLocalPay = productsItems.filter(
-    //     //         (product) => product.count === product.count--
-    //     //     );
-    //     //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-    //     // }
-    //     // setCountProduct(product.countPay++);
-    // };
-
-    // const handleDecrement = () => {
-    //     console.log("handleDecrement", product);
-    //     setCounter((prevState) => prevState - 1);
-    //     // if (product.countPay <= 1) {
-    //     //     const newLocalPay = productsItems.filter(
-    //     //         (product) => product.count === product.count++
-    //     //     );
-    //     //     localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-    //     // }
-    //     // setCountProduct(product.countPay--);
-    // };
-
     return (
         <>
             <div key={product._id} className="card w-100">
@@ -77,7 +36,6 @@ const BasketCartList = ({
                                 <div className="card-counter-product">
                                     <BasketCartListCounter
                                         counter={product.countPay}
-                                        // counter={counter}
                                         prodId={prodId}
                                         handleDecrement={handleDecrement}
                                         handleIncrement={handleIncrement}
@@ -113,7 +71,6 @@ const BasketCartList = ({
 
 BasketCartList.propTypes = {
     product: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    productsItems: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     prodId: PropTypes.string,
     handleDelete: PropTypes.func,
     handleIncrement: PropTypes.func,

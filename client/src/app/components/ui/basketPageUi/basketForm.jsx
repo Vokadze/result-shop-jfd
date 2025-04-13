@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-
 import BasketCartList from "../../page/basketPageList/basketCartList/basketCartList";
 import BasketOrder from "../../page/basketPageList/basketCartList/basketOrder";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,50 +8,17 @@ import {
     getBaskets,
     loadBasketsList
 } from "../../../store/baskets";
-// import basketService from "../../../service/basket.service";
 
 const BasketForm = () => {
-    const [productLocal, setProductLocal] = useState();
-    // const newProductsItem = localStorage.getItem("productsItems");
-    // const productsItems = JSON.parse(newProductsItem);
-
     const dispatch = useDispatch();
-
     const productsItem = useSelector(getBaskets());
-    console.log(productsItem);
 
     useEffect(() => {
         dispatch(loadBasketsList());
     }, []);
 
-    useEffect(() => {
-        setProductLocal();
-    }, [productLocal]);
-
     const handleDelete = (prodId) => {
-        console.log("handleDelete", prodId);
         dispatch(getBasketDeleteIds(prodId));
-    };
-
-    const handleIncrement = (id) => {
-        console.log("handleIncrement", id);
-        // const elementIndex = productsItems.findIndex(
-        //     (product) => product._id === id
-        // );
-        // const newCounters = [...productsItems];
-        // newCounters[elementIndex].countPay++;
-        // setProductLocal(newCounters);
-    };
-
-    const handleDecrement = (id) => {
-        console.log("handleDecrement", id);
-        // const elementIndex = productsItems.findIndex(
-        //     (product) => product._id === id
-        // );
-        // const newCounters = [...productsItems];
-        // newCounters[elementIndex].countPay--;
-
-        // setProductLocal(newCounters);
     };
 
     const itemPrice = () => {
@@ -78,8 +44,6 @@ const BasketForm = () => {
                                         product={product}
                                         prodId={product._id}
                                         key={product._id}
-                                        handleIncrement={handleIncrement}
-                                        handleDecrement={handleDecrement}
                                         productsItem={productsItem}
                                         handleDelete={handleDelete}
                                         {...product}
