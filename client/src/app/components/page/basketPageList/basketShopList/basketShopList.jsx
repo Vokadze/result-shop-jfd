@@ -60,7 +60,6 @@ const BasketShopList = ({ product, onAddProduct }) => {
 BasketShopList.propTypes = {
     product: PropTypes.object,
     onAddProduct: PropTypes.func,
-    onRemoveProduct: PropTypes.func,
     item: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 

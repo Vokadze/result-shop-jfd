@@ -4,10 +4,10 @@ import PropTypes from "prop-types";
 import BasketSearchStatus from "../../../ui/basketPageUi/basketSearchStatus";
 import "./index.css";
 
-const BasketOrder = ({ productsItems, handleClick, itemPrice }) => {
+const BasketOrder = ({ productsItem, handleClick, itemPrice }) => {
     const formatButton = () => {
         const classes = "btn btn-sm text-nowrap btn-warning ";
-        return productsItems.length === 0 ? classes + "disabled" : classes;
+        return productsItem.length === 0 ? classes + "disabled" : classes;
     };
 
     return (
@@ -17,7 +17,7 @@ const BasketOrder = ({ productsItems, handleClick, itemPrice }) => {
                     <div className="col-order">
                         <div className="text-order">Итого:</div>
                         <div>
-                            <BasketSearchStatus length={productsItems.length} />
+                            <BasketSearchStatus length={productsItem.length} />
                         </div>
                         <div className="text-order">Итоговая сумма:</div>
                         <div className="result-order">${itemPrice()}</div>
@@ -37,7 +37,7 @@ const BasketOrder = ({ productsItems, handleClick, itemPrice }) => {
 };
 
 BasketOrder.propTypes = {
-    productsItems: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    productsItem: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     handleClick: PropTypes.func,
     itemPrice: PropTypes.func
 };

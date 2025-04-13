@@ -4,10 +4,15 @@ import { Link } from "react-router-dom";
 import { BiCartAlt } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { getIsLoggedIn } from "../../store/users";
-// import NavProfile from "./navProfile";
-// d-flex flex-row border border-warning justify-content-center mb-2
-const NavBar = ({ countCartItems }) => {
+import { getUserId } from "../../service/localStorage.service";
+import { getBaskets } from "../../store/baskets";
+
+const NavBar = () => {
     const isLoggedIn = useSelector(getIsLoggedIn());
+
+    const userId = getUserId();
+
+    const countCartItems = useSelector(getBaskets(userId));
 
     return (
         <nav className="navbar">
@@ -15,7 +20,6 @@ const NavBar = ({ countCartItems }) => {
                 className="container border border-warning"
                 style={{ background: "#dee2e6" }}
             >
-                {/* <div className="container-fluid"> */}
                 <ul className="nav">
                     <li className="nav-item">
                         <Link

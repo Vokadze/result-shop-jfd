@@ -1,49 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-
 import BasketCartList from "../../page/basketPageList/basketCartList/basketCartList";
 import BasketOrder from "../../page/basketPageList/basketCartList/basketOrder";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getBasketDeleteIds,
+    getBaskets,
+    loadBasketsList
+} from "../../../store/baskets";
 
 const BasketForm = () => {
-    const [productLocal, setProductLocal] = useState();
-    const newProductsItem = localStorage.getItem("productsItems");
-    const productsItems = JSON.parse(newProductsItem);
+    const dispatch = useDispatch();
+    const productsItem = useSelector(getBaskets());
 
     useEffect(() => {
-        setProductLocal();
-    }, [productLocal]);
+        dispatch(loadBasketsList());
+    }, []);
 
     const handleDelete = (prodId) => {
-        if (productsItems) {
-            const newLocal = productsItems.filter(
-                (product) => product._id !== prodId
-            );
-            localStorage.setItem("productsItems", JSON.stringify(newLocal));
-            setProductLocal(newLocal);
-        }
-    };
-
-    const handleIncrement = (id) => {
-        const elementIndex = productsItems.findIndex(
-            (product) => product._id === id
-        );
-        const newCounters = [...productsItems];
-        newCounters[elementIndex].countPay++;
-        setProductLocal(newCounters);
-    };
-
-    const handleDecrement = (id) => {
-        const elementIndex = productsItems.findIndex(
-            (product) => product._id === id
-        );
-        const newCounters = [...productsItems];
-        newCounters[elementIndex].countPay--;
-
-        setProductLocal(newCounters);
+        dispatch(getBasketDeleteIds(prodId));
     };
 
     const itemPrice = () => {
-        const newOrderPay = productsItems
+        const newOrderPay = productsItem
             .reduce((a, c) => a + c.countPay * c.price, 0)
             .toFixed(2);
         return newOrderPay;
@@ -52,7 +31,7 @@ const BasketForm = () => {
     const handleClick = () => {
         console.log("click");
     };
-    if (productsItems) {
+    if (productsItem) {
         return (
             <div className="d-flex justify-content-center">
                 <div className="d-flex flex-column w-100">
@@ -60,13 +39,12 @@ const BasketForm = () => {
                     <div className="d-flex flex-row">
                         <div className="row cols-row-1 cols-row-md-3 g-0">
                             <div className="col">
-                                {productsItems.map((product) => (
+                                {productsItem.map((product) => (
                                     <BasketCartList
                                         product={product}
+                                        prodId={product._id}
                                         key={product._id}
-                                        handleIncrement={handleIncrement}
-                                        handleDecrement={handleDecrement}
-                                        productsItems={productsItems}
+                                        productsItem={productsItem}
                                         handleDelete={handleDelete}
                                         {...product}
                                     />
@@ -75,7 +53,7 @@ const BasketForm = () => {
                         </div>
                         <BasketOrder
                             itemPrice={itemPrice}
-                            productsItems={productsItems}
+                            productsItem={productsItem}
                             handleClick={handleClick}
                         />
                     </div>
@@ -92,8 +70,7 @@ const BasketForm = () => {
 };
 
 BasketForm.propTypes = {
-    onAddProduct: PropTypes.func,
-    onRemoveProduct: PropTypes.func
+    onAddProduct: PropTypes.func
 };
 
 export default BasketForm;

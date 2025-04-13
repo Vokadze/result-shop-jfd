@@ -1,35 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { AiOutlineClose } from "react-icons/ai";
 import BasketCartListCounter from "../../../ui/basketPageUi/basketCartListCounter";
 
-const BasketCartList = ({ product, productsItems, handleDelete }) => {
-    const [countProduct, setCountProduct] = useState();
-
-    useEffect(() => {
-        setCountProduct();
-    }, [countProduct]);
-
-    const handleIncrement = () => {
-        if (product.countPay >= 1) {
-            const newLocalPay = productsItems.filter(
-                (product) => product.count === product.count--
-            );
-            localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-        }
-        setCountProduct(product.countPay++);
-    };
-
-    const handleDecrement = () => {
-        if (product.countPay <= 1) {
-            const newLocalPay = productsItems.filter(
-                (product) => product.count === product.count++
-            );
-            localStorage.setItem("productsItems", JSON.stringify(newLocalPay));
-        }
-        setCountProduct(product.countPay--);
-    };
-
+const BasketCartList = ({
+    product,
+    prodId,
+    handleDelete,
+    handleIncrement,
+    handleDecrement
+}) => {
     return (
         <>
             <div key={product._id} className="card w-100">
@@ -55,6 +35,8 @@ const BasketCartList = ({ product, productsItems, handleDelete }) => {
                                 <h6>Количество:</h6>
                                 <div className="card-counter-product">
                                     <BasketCartListCounter
+                                        counter={product.countPay}
+                                        prodId={prodId}
                                         handleDecrement={handleDecrement}
                                         handleIncrement={handleIncrement}
                                         product={product}
@@ -89,8 +71,10 @@ const BasketCartList = ({ product, productsItems, handleDelete }) => {
 
 BasketCartList.propTypes = {
     product: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    productsItems: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    handleDelete: PropTypes.func
+    prodId: PropTypes.string,
+    handleDelete: PropTypes.func,
+    handleIncrement: PropTypes.func,
+    handleDecrement: PropTypes.func
 };
 
 export default BasketCartList;
