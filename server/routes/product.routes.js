@@ -59,10 +59,7 @@ router
         try {
             const {prodId} = req.params
 
-            console.log("prodId", prodId)
-
             const removedProduct = await Product.findById(prodId)
-            // const removedProduct = await Product.find({_id: prodId})
 
             if (removedProduct._id.toString() === prodId) {
                 await removedProduct.deleteOne()
