@@ -1,10 +1,11 @@
 const express = require("express")
+const auth = require("../middleware/auth.middleware")
 const Basket = require("../models/Basket")
 const router = express.Router({mergeParams: true})
 
 router
     .route("/")
-    .get(async (req, res) => {
+    .get(auth, async (req, res) => {
         try {
             const list = await Basket.find()
             res.status(200).send(list)
@@ -14,7 +15,7 @@ router
               });
         }
     })
-    .post(async (req, res) => {
+    .post(auth, async (req, res) => {
         try {
             const newBasket = await Basket.create({
                 ...req.body,
@@ -27,7 +28,7 @@ router
               });
         }
     })
-    router.patch("/:basket", async (req, res) => {
+    router.patch("/:basket", auth, async (req, res) => {
         try {
             if (req.body) {
                 const newBasketUptate = await Basket.findByIdAndUpdate(req.body._id, req.body, {new: true})
@@ -42,7 +43,7 @@ router
         }
     })
 
-    router.delete("/:prodId", async (req, res) => {
+    router.delete("/:prodId", auth, async (req, res) => {
         try {
             const { prodId } = req.params
 
